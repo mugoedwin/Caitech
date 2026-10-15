@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { CourseCardModel } from "@/types/api";
 import { cn } from "@/lib/utils/cn";
 import { displayTitle } from "@/lib/utils/display";
+import { DEFAULT_COURSE_IMAGE } from "@/lib/content/course-images";
 
 export function CourseCard({
   course,
@@ -23,21 +24,15 @@ export function CourseCard({
         href={course.href}
         className="flex h-full flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2"
       >
-        <div className="relative aspect-[16/10] overflow-hidden bg-petrol/5">
-          {course.imageUrl ? (
-            <Image
-              src={course.imageUrl}
-              alt=""
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
-            />
-          ) : (
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-[linear-gradient(145deg,rgb(18_52_59/0.12),rgb(18_52_59/0.04)_40%,rgb(199_240_0/0.14))]"
-            />
-          )}
+        <div className="relative aspect-video overflow-hidden bg-petrol/5">
+          <Image
+            src={course.imageUrl || DEFAULT_COURSE_IMAGE}
+            alt=""
+            fill
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+          />
         </div>
 
         <div className="flex flex-1 flex-col gap-3 p-5 md:p-6">

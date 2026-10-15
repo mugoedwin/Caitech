@@ -1,6 +1,7 @@
 import { apiFetch, ApiError } from "@/lib/api/client";
 import { formatMoney, mediaUrl } from "@/lib/utils/format";
 import { displayCategory, displayTitle } from "@/lib/utils/display";
+import { resolveCourseImage } from "@/lib/content/course-images";
 import type {
   Category,
   CourseCardModel,
@@ -94,7 +95,12 @@ export function toCourseCard(c: CourseListItem): CourseCardModel {
     href: `/courses/${c.slug}`,
     title: displayTitle(c.title),
     description: blurb,
-    imageUrl: mediaUrl(c.image),
+    imageUrl: resolveCourseImage({
+      slug: c.slug,
+      title: c.title,
+      categoryName: c.category_name,
+      apiImageUrl: mediaUrl(c.image),
+    }),
     categoryLabel: displayCategory(c.category_name) || null,
     level: c.level || null,
     durationLabel: durationLabel(c),

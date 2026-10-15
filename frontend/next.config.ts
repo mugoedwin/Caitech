@@ -38,6 +38,11 @@ const nextConfig: NextConfig = {
         hostname: "**.amazonaws.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
     ],
   },
   // Phase 1 spike: keep false until catalog fetch + shell verified under PPR.

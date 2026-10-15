@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ApiError } from "@/lib/api/client";
 import { getStudentDashboard } from "@/lib/api/lms";
 import { displayTitle } from "@/lib/utils/display";
+import { resolveCourseImage } from "@/lib/content/course-images";
 import type { DashboardEnrollment } from "@/types/api";
 import { PageHeader } from "@/components/portal/PageHeader";
 import { ProgressBar } from "@/components/portal/ProgressBar";
@@ -97,18 +98,17 @@ export default function StudentLearningPage() {
         {list.map((e) => (
           <li key={e.id} className="flex flex-col border border-line bg-surface">
             <div className="aspect-[16/9] bg-petrol/5">
-              {e.course_image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={e.course_image}
-                  alt=""
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center font-mono text-[10px] uppercase tracking-[0.14em] text-ink-muted">
-                  CAITECH
-                </div>
-              )}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={resolveCourseImage({
+                  slug: e.course_slug,
+                  title: e.course_title,
+                  apiImageUrl: e.course_image,
+                })}
+                alt=""
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
             </div>
             <div className="flex flex-1 flex-col gap-3 p-4">
               <div className="flex flex-wrap items-start justify-between gap-2">

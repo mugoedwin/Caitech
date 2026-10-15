@@ -14,6 +14,7 @@ import {
 } from "@/lib/api/payments";
 import { ApiError } from "@/lib/api/client";
 import { formatMoney, mediaUrl } from "@/lib/utils/format";
+import { resolveCourseImage } from "@/lib/content/course-images";
 import type { Cart } from "@/types/api";
 
 function CartView() {
@@ -125,7 +126,7 @@ function CartView() {
         <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_20rem]">
           <ul className="list-none space-y-0 border border-line p-0">
             {cart!.items.map((item) => {
-              const img = mediaUrl(item.image);
+              const img = resolveCourseImage({ slug: item.slug, title: item.title, apiImageUrl: mediaUrl(item.image) });
               return (
                 <li
                   key={item.course_id}

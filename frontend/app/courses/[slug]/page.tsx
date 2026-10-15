@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { CoursePurchaseActions } from "@/components/courses/CoursePurchaseActions";
 import { getCourseBySlug } from "@/lib/api/courses";
 import { formatMoney, mediaUrl } from "@/lib/utils/format";
+import { resolveCourseImage } from "@/lib/content/course-images";
 import { displayCategory, displayTitle } from "@/lib/utils/display";
 import { ApiError } from "@/lib/api/client";
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const desc =
       (course.short_description || course.description || "").slice(0, 160) ||
       undefined;
-    const img = mediaUrl(course.image);
+    const img = resolveCourseImage({ slug: course.slug, title: course.title, categoryName: course.category_name, apiImageUrl: mediaUrl(course.image) });
     return {
       title: course.title,
       description: desc,
@@ -73,7 +74,7 @@ export default async function CourseDetailPage({ params }: Props) {
 
   if (!course) notFound();
 
-  const image = mediaUrl(course.image);
+  const image = resolveCourseImage({ slug: course.slug, title: course.title, categoryName: course.category_name, apiImageUrl: mediaUrl(course.image) });
   const currency = course.currency || "KES";
   const priceLabel = course.is_free
     ? "Free"
