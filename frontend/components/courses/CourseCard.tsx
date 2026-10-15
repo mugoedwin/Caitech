@@ -15,14 +15,13 @@ export function CourseCard({
   return (
     <article
       className={cn(
-        "group flex h-full flex-col border border-line bg-surface",
-        "transition-colors hover:border-petrol/40",
+        "course-card-premium group flex h-full flex-col",
         className,
       )}
     >
       <Link
         href={course.href}
-        className="flex h-full flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-lime focus-visible:ring-offset-2"
+        className="flex h-full flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2"
       >
         <div className="relative aspect-video overflow-hidden bg-petrol/5">
           <Image

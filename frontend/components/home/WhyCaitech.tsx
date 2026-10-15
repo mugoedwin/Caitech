@@ -3,7 +3,7 @@ import { Section } from "@/components/ui/Section";
 
 export function WhyCaitech() {
   return (
-    <Section eyebrow={why.eyebrow} title={why.title}>
+    <Section className="section-tint-soft" eyebrow={why.eyebrow} title={why.title}>
       <ol className="grid gap-0 border border-line bg-surface md:grid-cols-3">
         {why.items.map((item, i) => (
           <li

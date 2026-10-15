@@ -97,7 +97,7 @@ export function AuthMobileLinks({ onNavigate }: { onNavigate?: () => void }) {
       <Link
         href="/register"
         onClick={onNavigate}
-        className="px-2 py-3 text-base text-petrol"
+        className="btn-primary-premium mt-1 inline-flex items-center justify-center rounded-md px-3 py-3 text-base font-semibold text-lime-ink"
       >
         Register
       </Link>

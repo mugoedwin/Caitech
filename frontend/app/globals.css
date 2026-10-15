@@ -9,12 +9,20 @@
   --color-lime: #c7f000;
   --color-lime-bright: #c8f13f;
   --color-lime-ink: #1a2e05;
-  --color-ground: #f5f5f0;
+  --color-ground: #f4f3ee;
   --color-surface: #ffffff;
-  --color-ink: #14212b;
-  --color-ink-muted: #5c6b73;
-  --color-line: #d9ddd6;
+  --color-ink: #0f1720;
+  --color-ink-muted: #5a6770;
+  --color-line: #d4d8d0;
   --color-danger: #b42318;
+
+  /* Premium technical accents */
+  --color-charcoal: #090a0f;
+  --color-slate: #111827;
+  --color-cyan: #06b6d4;
+  --color-cyan-soft: #22d3ee;
+  --color-blue: #3b82f6;
+  --color-amber: #f59e0b;
 
   --font-display: var(--font-display), "Newsreader", "Times New Roman", serif;
   --font-sans: var(--font-body), "Source Sans 3", system-ui, sans-serif;
@@ -31,22 +39,25 @@
   --text-5xl: 3rem;
   --text-6xl: 3.75rem;
 
-  --leading-tight: 1.2;
+  --leading-tight: 1.15;
   --leading-snug: 1.35;
-  --leading-normal: 1.5;
+  --leading-normal: 1.55;
   --leading-relaxed: 1.65;
 
   --spacing-section-y: 4.5rem;
   --spacing-section-y-lg: 6.5rem;
   --spacing-gutter: 1.25rem;
 
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 8px;
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 2px rgb(20 33 43 / 0.06);
-  --shadow-md: 0 4px 14px rgb(20 33 43 / 0.08);
+  --shadow-sm: 0 1px 2px rgb(9 10 15 / 0.05), 0 1px 1px rgb(9 10 15 / 0.03);
+  --shadow-md: 0 4px 16px rgb(9 10 15 / 0.07), 0 1px 3px rgb(9 10 15 / 0.04);
+  --shadow-lg: 0 12px 40px rgb(9 10 15 / 0.1), 0 4px 12px rgb(9 10 15 / 0.05);
+  --shadow-glow-cyan: 0 0 48px rgb(6 182 212 / 0.18);
+  --shadow-glow-lime: 0 0 32px rgb(199 240 0 / 0.22);
 
   --breakpoint-sm: 40rem;
   --breakpoint-md: 48rem;
@@ -85,7 +96,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-petrol);
+    outline: 2px solid var(--color-cyan);
     outline-offset: 2px;
   }
 
@@ -113,7 +124,13 @@
   .hairline-lime {
     height: 2px;
     width: 3rem;
-    background: var(--color-lime);
+    background: linear-gradient(90deg, var(--color-lime), var(--color-cyan));
+  }
+
+  .hairline-cyan {
+    height: 2px;
+    width: 3rem;
+    background: linear-gradient(90deg, var(--color-cyan), var(--color-blue));
   }
 }
 
@@ -311,15 +328,26 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* LEFT dark for type · CENTER soft · RIGHT stays rich / detailed */
-  background: linear-gradient(
-    90deg,
-    color-mix(in oklab, var(--color-petrol-deep) 86%, transparent) 0%,
-    color-mix(in oklab, var(--color-petrol-deep) 68%, transparent) 22%,
-    color-mix(in oklab, var(--color-petrol-deep) 32%, transparent) 42%,
-    color-mix(in oklab, var(--color-petrol-deep) 8%, transparent) 60%,
-    transparent 74%
-  );
+  /* Atmospheric charcoal/slate + cyan glow · left readable · right image detail */
+  background:
+    radial-gradient(
+      ellipse 65% 50% at 16% 78%,
+      color-mix(in oklab, var(--color-cyan) 16%, transparent) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 45% 40% at 92% 12%,
+      color-mix(in oklab, var(--color-blue) 12%, transparent) 0%,
+      transparent 52%
+    ),
+    linear-gradient(
+      100deg,
+      color-mix(in oklab, var(--color-charcoal) 90%, transparent) 0%,
+      color-mix(in oklab, var(--color-slate) 78%, transparent) 28%,
+      color-mix(in oklab, var(--color-petrol-deep) 58%, transparent) 52%,
+      color-mix(in oklab, var(--color-petrol-deep) 22%, transparent) 72%,
+      color-mix(in oklab, var(--color-petrol-deep) 6%, transparent) 100%
+    );
 }
 
 /* Soft bottom fade for foot meta — keeps photo crisp */
@@ -359,11 +387,11 @@
 
 .home-hero__rule {
   display: block;
-  margin-top: 0.65rem;
-  margin-bottom: 1.05rem;
-  width: 2.75rem;
+  width: 3.25rem;
   height: 2px;
-  background: var(--color-lime);
+  margin-block: 0.85rem 1.15rem;
+  background: linear-gradient(90deg, var(--color-lime) 0%, var(--color-cyan) 100%);
+  box-shadow: 0 0 18px color-mix(in oklab, var(--color-cyan) 35%, transparent);
 }
 
 .home-hero__title {
@@ -576,6 +604,66 @@
   }
 }
 /* end home-hero */
+
+/* ------------------------------------------------------------------ */
+/* Inner-page heroes (courses / services / blog) — same stage as home  */
+/* ------------------------------------------------------------------ */
+.page-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Match .home-hero stage height so all primary heroes share one length */
+  min-height: clamp(28rem, 56vw, 40.5rem);
+  max-height: 42.5rem;
+  /* Shared petrol stage — lime + cyan glows (courses reference) */
+  background-color: var(--color-petrol-deep);
+  background-image:
+    radial-gradient(
+      ellipse 55% 70% at 92% 8%,
+      color-mix(in oklab, var(--color-lime) 16%, transparent),
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse 45% 55% at 0% 100%,
+      color-mix(in oklab, var(--color-cyan) 14%, transparent),
+      transparent 55%
+    );
+}
+
+/* Soft grid texture over the glows */
+.page-hero::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.07;
+  background-image:
+    linear-gradient(to right, var(--color-ground) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-ground) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(
+    ellipse 80% 70% at 30% 40%,
+    black 20%,
+    transparent 75%
+  );
+}
+
+.page-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 639px) {
+  .page-hero {
+    max-height: none;
+    min-height: min(36rem, calc(100svh - 4.15rem));
+  }
+}
+
+/* end page-hero */
 
 /* ------------------------------------------------------------------ */
 /* Schools explorer — continuous dual-rail editorial marquee             */
@@ -1113,4 +1201,195 @@ section.schools-explorer {
     transform: none !important;
     opacity: 1 !important;
   }
+}
+
+/* ------------------------------------------------------------------ */
+/* Premium shared chrome — header, cards, CTAs                         */
+/* ------------------------------------------------------------------ */
+
+.site-header {
+  background: color-mix(in oklab, var(--color-ground) 78%, white 22%);
+  border-bottom: 1px solid color-mix(in oklab, var(--color-line) 72%, var(--color-petrol) 10%);
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+  box-shadow: 0 1px 0 color-mix(in oklab, white 50%, transparent);
+}
+
+.site-header__inner {
+  min-height: 4.25rem;
+}
+
+.nav-link {
+  position: relative;
+  color: var(--color-ink-muted);
+  transition: color 160ms ease;
+}
+.nav-link:hover,
+.nav-link:focus-visible {
+  color: var(--color-petrol-deep);
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  right: 0.55rem;
+  bottom: 0.3rem;
+  height: 1.5px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, var(--color-cyan), var(--color-lime));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms ease;
+  opacity: 0.9;
+}
+.nav-link:hover::after,
+.nav-link:focus-visible::after,
+.nav-link--active::after {
+  transform: scaleX(1);
+}
+.nav-link--active {
+  color: var(--color-petrol-deep);
+}
+
+.logo-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.logo-mark__image-wrap {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--color-line) 70%, var(--color-petrol) 30%),
+    0 1px 3px rgb(9 10 15 / 0.08);
+  background: #fff;
+}
+.logo-mark__image-wrap--vector {
+  box-shadow: none;
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
+}
+.logo-mark__text {
+  display: none;
+  flex-direction: column;
+  line-height: 1.05;
+  padding-left: 0.7rem;
+  border-left: 1px solid color-mix(in oklab, var(--color-line) 75%, var(--color-petrol) 25%);
+}
+@media (min-width: 40rem) {
+  .logo-mark__text {
+    display: flex;
+  }
+}
+.logo-mark__name {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--color-petrol-deep);
+}
+.logo-mark__sub {
+  margin-top: 0.18rem;
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+.btn-primary-premium {
+  background: linear-gradient(
+    180deg,
+    color-mix(in oklab, var(--color-lime-bright) 90%, white) 0%,
+    var(--color-lime) 100%
+  ) !important;
+  color: var(--color-lime-ink) !important;
+  border: 1px solid color-mix(in oklab, var(--color-lime) 65%, #6f8d00 35%) !important;
+  box-shadow:
+    0 1px 0 color-mix(in oklab, white 55%, transparent) inset,
+    0 1px 2px rgb(9 10 15 / 0.08);
+  transition: filter 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.btn-primary-premium:hover {
+  filter: brightness(1.03);
+  box-shadow:
+    0 1px 0 color-mix(in oklab, white 55%, transparent) inset,
+    0 4px 14px color-mix(in oklab, var(--color-lime) 32%, transparent),
+    0 0 0 1px color-mix(in oklab, var(--color-cyan) 22%, transparent);
+}
+.btn-primary-premium:active {
+  transform: translateY(0.5px);
+}
+
+.card-premium {
+  background: color-mix(in oklab, var(--color-surface) 96%, var(--color-ground) 4%);
+  border: 1px solid color-mix(in oklab, var(--color-line) 88%, var(--color-petrol) 12%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card-premium:hover {
+    border-color: color-mix(in oklab, var(--color-cyan) 32%, var(--color-line));
+    box-shadow: var(--shadow-md), 0 0 0 1px color-mix(in oklab, var(--color-cyan) 10%, transparent);
+    transform: translateY(-2px);
+  }
+}
+
+.course-card-premium {
+  overflow: hidden;
+  border-radius: var(--radius-lg) !important;
+  border-color: color-mix(in oklab, var(--color-line) 90%, var(--color-petrol) 10%) !important;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 180ms ease, box-shadow 200ms ease, transform 200ms ease !important;
+}
+@media (hover: hover) and (pointer: fine) {
+  .course-card-premium:hover {
+    border-color: color-mix(in oklab, var(--color-cyan) 28%, var(--color-line)) !important;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-premium,
+  .course-card-premium,
+  .btn-primary-premium,
+  .nav-link::after {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Section colour rhythm */
+.section-tint-soft {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-cyan) 4.5%, var(--color-ground)) 0%,
+      var(--color-ground) 100%
+    ) !important;
+}
+.section-tint-slate {
+  background:
+    linear-gradient(
+      165deg,
+      color-mix(in oklab, var(--color-slate) 94%, var(--color-blue)) 0%,
+      var(--color-charcoal) 100%
+    ) !important;
+  color: var(--color-ground);
+}
+.blog-card {
+  transition: background-color 160ms ease, box-shadow 160ms ease;
+}
+.blog-card:hover {
+  box-shadow: inset 3px 0 0 0 var(--color-cyan);
 }

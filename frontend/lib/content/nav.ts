@@ -1,11 +1,13 @@
 import type { NavItem } from "@/types/nav";
 
+/** Primary chrome — exact client order */
 export const primaryNav: readonly NavItem[] = [
+  { label: "Home", href: "/" },
   { label: "Courses", href: "/courses" },
-  { label: "AI Path", href: "/ai-path" },
-  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
   { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
+  { label: "About Us", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
 ] as const;
 
 export const utilityNav: readonly NavItem[] = [
@@ -16,13 +18,14 @@ export const utilityNav: readonly NavItem[] = [
 export const footerNav = {
   learn: [
     { label: "Courses", href: "/courses" },
+    { label: "Services", href: "/services" },
     { label: "Learning areas", href: "/#learning-areas" },
     { label: "AI Learning Path", href: "/ai-path" },
   ],
   institute: [
-    { label: "About", href: "/about" },
+    { label: "About Us", href: "/about" },
     { label: "Blog", href: "/blog" },
-    { label: "Contact", href: "/contact" },
+    { label: "Contact Us", href: "/contact" },
   ],
   account: [
     { label: "Log in", href: "/login" },

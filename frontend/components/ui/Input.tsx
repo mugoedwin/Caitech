@@ -30,7 +30,7 @@ export function Input({
         className={cn(
           "h-11 w-full rounded-[var(--radius-md)] border bg-surface px-3 text-base text-ink",
           "placeholder:text-ink-muted/70",
-          "border-line focus:border-petrol focus:outline-none focus:ring-1 focus:ring-petrol",
+          "border-line focus:border-[var(--color-cyan)] focus:outline-none focus:ring-1 focus:ring-[var(--color-cyan)]",
           error && "border-danger focus:border-danger focus:ring-danger",
           className,
         )}

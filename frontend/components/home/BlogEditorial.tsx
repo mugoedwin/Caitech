@@ -4,24 +4,36 @@ import { getRecentPosts } from "@/lib/api/content";
 import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import { mediaUrl } from "@/lib/utils/format";
+import {
+  DEMO_BLOG_POSTS,
+  resolveBlogImage,
+} from "@/lib/content/blog-images";
 import { blogTeaser } from "@/lib/content/stub-copy";
 
-/** Homepage journal — live posts only. Omits section when empty. */
+/** Homepage journal — live posts, or demo samples with real thumbnails. */
 export async function BlogEditorial() {
-  const posts = await getRecentPosts(3);
-  if (posts.length === 0) return null;
+  let posts = await getRecentPosts(3);
+  if (posts.length === 0) {
+    posts = DEMO_BLOG_POSTS.slice(0, 3);
+  }
 
   return (
     <Section
       id="insights"
+      className="section-tint-soft"
       eyebrow={blogTeaser.eyebrow}
       title={blogTeaser.title}
       lede={blogTeaser.emptyBody}
     >
-      <ul className="grid list-none grid-cols-1 gap-0 border border-line p-0 md:grid-cols-3">
+      <ul className="m-0 grid list-none grid-cols-1 gap-0 overflow-hidden rounded-[var(--radius-lg)] border border-line bg-surface p-0 shadow-[var(--shadow-sm)] md:grid-cols-3">
         {posts.map((post, i) => {
-          const img = mediaUrl(post.featured_image);
+          const resolved = resolveBlogImage(
+            post,
+            mediaUrl(post.featured_image),
+          );
           const date = post.published_at || post.created_at;
+          const isDemo =
+            Array.isArray(post.tags) && post.tags.includes("demo");
           return (
             <li
               key={post.id}
@@ -32,24 +44,17 @@ export async function BlogEditorial() {
               }
             >
               <Link
-                href={`/blog/${post.slug}`}
-                className="group flex h-full flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                href={isDemo ? "/blog" : `/blog/${post.slug}`}
+                className="group flex h-full flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cyan)]"
               >
                 <div className="relative aspect-[16/10] overflow-hidden bg-petrol/5">
-                  {img ? (
-                    <Image
-                      src={img}
-                      alt=""
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover"
-                    />
-                  ) : (
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 bg-[linear-gradient(145deg,rgb(18_52_59/0.1),rgb(199_240_0/0.1))]"
-                    />
-                  )}
+                  <Image
+                    src={resolved.src}
+                    alt={resolved.alt}
+                    fill
+                    sizes="(max-width:768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
                 </div>
                 <div className="flex flex-1 flex-col gap-2 p-5 md:p-6">
                   <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-muted">
@@ -61,6 +66,7 @@ export async function BlogEditorial() {
                           })
                         : null,
                       post.categories?.[0],
+                      isDemo ? "Demo" : null,
                     ]
                       .filter(Boolean)
                       .join(" · ")}

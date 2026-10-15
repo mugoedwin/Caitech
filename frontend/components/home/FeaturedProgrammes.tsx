@@ -16,7 +16,7 @@ export async function FeaturedProgrammes() {
   const useLive = live.length > 0;
 
   return (
-    <Section
+    <Section className="section-tint-soft"
       id="featured-programmes"
       eyebrow={featured.eyebrow}
       title={featured.title}

@@ -6,6 +6,8 @@ export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   hint?: string;
   error?: string;
   id: string;
+  /** Stretch to fill a flex parent (e.g. equal-height form cards). */
+  fill?: boolean;
 };
 
 export function Textarea({
@@ -14,13 +16,19 @@ export function Textarea({
   error,
   id,
   className,
+  fill = false,
   rows = 4,
   ...rest
 }: TextareaProps) {
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined;
 
   return (
-    <div className="flex flex-col gap-1.5">
+    <div
+      className={cn(
+        "flex flex-col gap-1.5",
+        fill && "min-h-0 flex-1",
+      )}
+    >
       <label htmlFor={id} className="text-sm font-medium text-ink">
         {label}
       </label>
@@ -32,8 +40,9 @@ export function Textarea({
         className={cn(
           "w-full rounded-[var(--radius-md)] border bg-surface px-3 py-2.5 text-base text-ink",
           "placeholder:text-ink-muted/70",
-          "border-line focus:border-petrol focus:outline-none focus:ring-1 focus:ring-petrol",
+          "border-line focus:border-[var(--color-cyan)] focus:outline-none focus:ring-1 focus:ring-[var(--color-cyan)]",
           error && "border-danger focus:border-danger focus:ring-danger",
+          fill && "min-h-[9rem] flex-1 resize-y lg:min-h-[11rem]",
           className,
         )}
         {...rest}

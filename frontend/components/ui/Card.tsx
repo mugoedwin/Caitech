@@ -15,7 +15,7 @@ export function Card({
   return (
     <Tag
       className={cn(
-        "bg-surface border border-line rounded-[var(--radius-md)]",
+        "card-premium",
         padded && "p-5 md:p-6",
         className,
       )}

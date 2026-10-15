@@ -7,7 +7,7 @@ import { Section } from "@/components/ui/Section";
  */
 export function ToolsStrip() {
   return (
-    <Section
+    <Section tone="surface"
       eyebrow="Stack"
       title="The tools behind the work"
       lede="Learn the software, systems and technical methods used to turn ideas into working projects."

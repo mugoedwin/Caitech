@@ -2,54 +2,75 @@ import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils/cn";
 
-/** Intrinsic logo aspect from source artwork (square mark). */
-const LOGO_INTRINSIC_W = 640;
-const LOGO_INTRINSIC_H = 640;
+/** High-res official mark (public/brand/caitech-logo.png). */
+const LOGO_W = 640;
+const LOGO_H = 640;
 
 type LogoProps = {
   className?: string;
-  /** Inverse treatment for dark petrol surfaces */
   inverse?: boolean;
-  /** Compact height for dense chrome */
   compact?: boolean;
+  showWordmark?: boolean;
 };
 
 /**
- * Real CAITECH institutional logo (circular mark + wordmark).
- * White plate on dark surfaces so the original artwork remains legible.
+ * Official CAITECH emblem + clean wordmark lockup.
+ * Uses the real brand PNG (gear + orange skyline) at crisp navbar scale —
+ * not a reinvented monogram.
  */
-export function Logo({ className, inverse = false, compact = false }: LogoProps) {
-  const height = compact ? 36 : 44;
-  const width = Math.round(height * (LOGO_INTRINSIC_W / LOGO_INTRINSIC_H));
+export function Logo({
+  className,
+  inverse = false,
+  compact = false,
+  showWordmark = true,
+}: LogoProps) {
+  const mark = compact ? 34 : 40;
 
   return (
     <Link
       href="/"
       className={cn(
-        "group inline-flex items-center no-underline",
+        "logo-mark group no-underline",
         "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4",
-        inverse ? "focus-visible:outline-lime" : "focus-visible:outline-petrol",
+        inverse
+          ? "focus-visible:outline-[var(--color-lime)]"
+          : "focus-visible:outline-[var(--color-cyan)]",
         className,
       )}
       aria-label="CAITECH Global Institute — home"
     >
       <span
         className={cn(
-          "relative inline-flex items-center justify-center overflow-hidden",
-          inverse &&
-            "rounded-sm bg-white px-1.5 py-1 shadow-[0_0_0_1px_rgb(255_255_255/0.15)]",
+          "logo-mark__image-wrap",
+          inverse && "bg-white shadow-[0_0_0_1px_rgb(255_255_255/0.2)]",
         )}
+        style={{ height: mark, width: mark }}
       >
         <Image
           src="/brand/caitech-logo.png"
-          alt="CAITECH Global Institute"
-          width={width}
-          height={height}
-          className="h-auto w-auto object-contain"
-          style={{ height, width: "auto" }}
+          alt=""
+          width={LOGO_W}
+          height={LOGO_H}
           priority
+          className="h-full w-full object-contain"
+          sizes={`${mark}px`}
         />
       </span>
+      {showWordmark ? (
+        <span
+          className={cn(
+            "logo-mark__text",
+            inverse && "border-[color-mix(in_oklab,white_28%,transparent)]",
+          )}
+        >
+          <span className={cn("logo-mark__name", inverse && "text-white")}>
+            CAITECH
+          </span>
+          <span className={cn("logo-mark__sub", inverse && "text-white/70")}>
+            Global Institute
+          </span>
+        </span>
+      ) : null}
     </Link>
   );
 }

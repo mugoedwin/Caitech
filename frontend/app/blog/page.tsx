@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/ui/Container";
+import { editorialArticles } from "@/lib/content/institute";
 import { Button } from "@/components/ui/Button";
 import { getBlogPosts } from "@/lib/api/content";
 import { ApiError } from "@/lib/api/client";
 import { mediaUrl } from "@/lib/utils/format";
+import {
+  DEMO_BLOG_POSTS,
+  resolveBlogImage,
+} from "@/lib/content/blog-images";
 
 export const metadata: Metadata = {
   title: "Insights",
@@ -53,14 +57,157 @@ export default async function BlogPage({
         : "We couldn't load the journal. Please try again.";
   }
 
+  const usingDemo = !error && !search && results.length === 0;
+  if (usingDemo) {
+    results = DEMO_BLOG_POSTS;
+    count = DEMO_BLOG_POSTS.length;
+  }
+
+  const topicChips = [
+    "CAD",
+    "BIM",
+    "Engineering",
+    "ICT",
+    "Construction",
+    "Design",
+  ] as const;
+  const featuredTopics = editorialArticles.slice(0, 3);
+  const featuredPost = results[0] ?? null;
+  const featuredImg = featuredPost
+    ? resolveBlogImage(featuredPost)
+    : null;
+
   return (
     <>
-      <PageHeader
-        eyebrow="Journal"
-        title="Insights from the institute"
-        description="Notes on CAD, BIM, engineering software, ICT and digital construction — written for learners and practitioners in Kenya."
-      />
-      <Container className="py-10 md:py-14">
+      <section className="page-hero overflow-hidden border-b border-line text-white">
+        <Container className="w-full py-10 md:py-12">
+          <div className="grid items-center gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
+            <div>
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-lime">
+                Institute journal
+              </p>
+              <span
+                aria-hidden
+                className="mt-3 block h-0.5 w-12 rounded-full bg-lime"
+              />
+              <h1 className="mt-4 max-w-2xl font-display text-3xl leading-[1.1] tracking-tight text-ground text-balance md:text-4xl lg:text-[2.85rem]">
+                Insights from the{" "}
+                <span className="text-lime">institute</span>
+              </h1>
+              <p className="mt-4 max-w-xl text-sm leading-relaxed text-ground/75 md:text-base">
+                Notes on CAD, BIM, engineering software, ICT and digital
+                construction — written for learners and practitioners building
+                real technical work in Kenya.
+              </p>
+
+              <form
+                role="search"
+                action="/blog"
+                className="mt-6 flex max-w-md gap-2"
+              >
+                <label htmlFor="blog-hero-q" className="sr-only">
+                  Search articles
+                </label>
+                <input
+                  id="blog-hero-q"
+                  name="search"
+                  type="search"
+                  defaultValue={search}
+                  placeholder="Search CAD, BIM, ICT…"
+                  className="h-12 min-w-0 flex-1 rounded-[var(--radius-md)] border border-ground/25 bg-ground/10 px-4 text-base text-ground placeholder:text-ground/40 outline-none transition-colors focus:border-lime/50 focus:bg-ground/[0.14] focus-visible:ring-2 focus-visible:ring-lime/40"
+                />
+                <Button type="submit" variant="lime" size="lg">
+                  Search
+                </Button>
+              </form>
+
+              <ul className="mt-5 m-0 flex list-none flex-wrap gap-2 p-0">
+                {topicChips.map((t) => (
+                  <li key={t}>
+                    <Link
+                      href={`/blog?search=${encodeURIComponent(t)}`}
+                      className="inline-flex rounded-full border border-ground/20 bg-ground/[0.06] px-3 py-1 font-mono text-[11px] tracking-wide text-ground/75 transition-colors hover:border-lime/45 hover:text-lime"
+                    >
+                      {t}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="relative">
+              {featuredPost && featuredImg ? (
+                <Link
+                  href={`/blog/${featuredPost.slug}`}
+                  className="group relative block overflow-hidden rounded-[var(--radius-lg)] border border-ground/15 bg-petrol shadow-[var(--shadow-md)]"
+                >
+                  <div className="relative aspect-[16/11] max-h-[min(22rem,42svh)] w-full sm:max-h-none">
+                    <Image
+                      src={featuredImg.src}
+                      alt={featuredImg.alt}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      sizes="(max-width:1024px) 100vw, 42vw"
+                      priority
+                    />
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 bg-gradient-to-t from-petrol-deep via-petrol-deep/50 to-transparent"
+                    />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-lime">
+                      Featured · Latest
+                    </p>
+                    <p className="mt-2 font-display text-xl leading-snug text-ground text-balance md:text-2xl">
+                      {featuredPost.title}
+                    </p>
+                    {featuredPost.excerpt ? (
+                      <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ground/70">
+                        {featuredPost.excerpt}
+                      </p>
+                    ) : null}
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-lime transition-transform group-hover:translate-x-0.5">
+                      Read article
+                      <span aria-hidden>→</span>
+                    </span>
+                  </div>
+                </Link>
+              ) : (
+                <div className="overflow-hidden rounded-[var(--radius-lg)] border border-ground/15 bg-petrol/80 p-1 shadow-[var(--shadow-md)]">
+                  <ul className="m-0 list-none divide-y divide-ground/10 p-0">
+                    {featuredTopics.map((a, i) => (
+                      <li key={a.slug}>
+                        <Link
+                          href={a.href}
+                          className="group flex gap-4 p-4 transition-colors hover:bg-ground/[0.06] md:p-5"
+                        >
+                          <span className="font-mono text-[11px] text-lime">
+                            {String(i + 1).padStart(2, "0")}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block font-display text-base leading-snug text-ground group-hover:text-lime md:text-lg">
+                              {a.title}
+                            </span>
+                            <span className="mt-1 block line-clamp-2 text-sm leading-relaxed text-ground/55">
+                              {a.excerpt}
+                            </span>
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.14em] text-ground/45">
+                Practice notes · tools · field methods
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <Container id="journal" className="scroll-mt-24 py-10 md:py-14">
         {error ? (
           <div className="border border-line bg-surface px-6 py-14 text-center">
             <h2 className="font-display text-2xl text-petrol">
@@ -73,7 +220,7 @@ export default async function BlogPage({
               </Button>
             </div>
           </div>
-        ) : results.length === 0 ? (
+        ) : results.length === 0 && !usingDemo ? (
           <div className="border border-line bg-surface px-6 py-16 text-center">
             <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">
               Journal
@@ -101,50 +248,46 @@ export default async function BlogPage({
             <div className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line pb-4">
               <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
                 {count} article{count === 1 ? "" : "s"}
+                {search ? (
+                  <span className="text-petrol"> · matching “{search}”</span>
+                ) : null}
               </p>
-              <form role="search" action="/blog" className="flex gap-2">
-                <label htmlFor="blog-q" className="sr-only">
-                  Search articles
-                </label>
-                <input
-                  id="blog-q"
-                  name="search"
-                  type="search"
-                  defaultValue={search}
-                  placeholder="Search"
-                  className="w-full max-w-xs border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus-visible:border-petrol focus-visible:ring-2 focus-visible:ring-lime/40"
-                />
-                <Button type="submit" variant="secondary">
-                  Search
+              {search ? (
+                <Button href="/blog" variant="secondary" size="sm">
+                  Clear search
                 </Button>
-              </form>
+              ) : null}
             </div>
 
-            <ul className="list-none space-y-0 divide-y divide-line border border-line p-0">
+            {usingDemo ? (
+              <p className="mb-4 rounded-[var(--radius-md)] border border-line bg-[color-mix(in_oklab,var(--color-cyan)_7%,var(--color-ground))] px-4 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">
+                Demo content — sample articles with topic imagery while CMS posts are empty
+              </p>
+            ) : null}
+            <ul className="list-none space-y-0 divide-y divide-line border border-line bg-ground p-0 shadow-[var(--shadow-sm)]">
               {results.map((post) => {
-                const img = mediaUrl(post.featured_image);
+                const resolved = resolveBlogImage(
+                  post,
+                  mediaUrl(post.featured_image),
+                );
                 const date = post.published_at || post.created_at;
+                const isDemo =
+                  usingDemo ||
+                  (Array.isArray(post.tags) && post.tags.includes("demo"));
                 return (
                   <li key={post.id}>
                     <Link
-                      href={`/blog/${post.slug}`}
-                      className="group grid gap-4 p-5 no-underline transition-colors hover:bg-surface sm:grid-cols-[8rem_1fr] sm:items-start md:p-6"
+                      href={isDemo ? "/blog" : `/blog/${post.slug}`}
+                      className="group blog-card grid gap-4 p-5 no-underline transition-colors hover:bg-surface sm:grid-cols-[minmax(11rem,15rem)_1fr] sm:items-start md:p-6"
                     >
-                      <div className="relative aspect-[4/3] overflow-hidden bg-petrol/5 sm:aspect-square">
-                        {img ? (
-                          <Image
-                            src={img}
-                            alt=""
-                            fill
-                            sizes="128px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div
-                            aria-hidden
-                            className="absolute inset-0 bg-[linear-gradient(145deg,rgb(18_52_59/0.1),rgb(199_240_0/0.12))]"
-                          />
-                        )}
+                      <div className="relative aspect-video overflow-hidden rounded-[var(--radius-md)] bg-petrol/5 ring-1 ring-[color-mix(in_oklab,var(--color-line)_75%,var(--color-petrol)_25%)] sm:aspect-[16/10]">
+                        <Image
+                          src={resolved.src}
+                          alt={resolved.alt}
+                          fill
+                          sizes="(max-width:640px) 100vw, 240px"
+                          className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                        />
                       </div>
                       <div className="min-w-0">
                         <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-muted">
@@ -157,6 +300,7 @@ export default async function BlogPage({
                                 })
                               : null,
                             post.categories?.[0],
+                            isDemo ? "Demo" : null,
                           ]
                             .filter(Boolean)
                             .join(" · ")}

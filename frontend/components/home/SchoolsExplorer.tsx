@@ -173,7 +173,7 @@ export function SchoolsExplorer() {
 
   return (
     <Section
-      id="schools"
+      id="learning-areas"
       eyebrow={copy.eyebrow}
       title={copy.title}
       lede={copy.lede}

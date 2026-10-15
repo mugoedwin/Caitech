@@ -48,51 +48,47 @@ const MISSION =
 export default function AboutPage() {
   return (
     <>
-      {/* —— Hero —— */}
-      <section className="relative isolate overflow-hidden border-b border-line bg-petrol-deep text-white">
-        <div className="absolute inset-0">
-          <Image
-            src={homeImages.hero.src}
-            alt={homeImages.hero.alt}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-50"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-[linear-gradient(105deg,rgb(12_36_41/0.94)_0%,rgb(12_36_41/0.82)_48%,rgb(12_36_41/0.5)_100%)]"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-petrol-deep/90 to-transparent"
-          />
-        </div>
-
-        <Container className="relative py-20 md:py-28 lg:py-32">
-          <div className="max-w-3xl">
-            <Eyebrow className="text-lime/90">About CAITECH</Eyebrow>
-            <h1 className="mt-5 font-display text-[clamp(2.35rem,5.5vw,4rem)] leading-[1.05] tracking-tight text-white">
+      {/* About hero — cream editorial split (distinct from home full-bleed) */}
+      <section className="border-b border-line bg-ground">
+        <Container className="grid items-stretch gap-8 py-12 md:grid-cols-2 md:gap-12 md:py-16 lg:gap-16 lg:py-20">
+          <div className="flex flex-col justify-center">
+            <Eyebrow className="text-petrol">About CAITECH</Eyebrow>
+            <h1 className="mt-5 font-display text-[clamp(2.25rem,4.8vw,3.65rem)] leading-[1.08] tracking-tight text-petrol">
               Building skills.
-              <span className="block text-lime">Shaping technical futures.</span>
+              <span className="mt-1 block text-petrol-muted">
+                Shaping technical futures.
+              </span>
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 md:text-lg">
+            <p className="mt-6 max-w-md text-base leading-relaxed text-ink-muted md:text-lg">
               CAITECH Global Institute prepares learners for the realities of
               modern technical work through practical education in ICT,
               engineering, design technology, and related disciplines.
             </p>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button href="/courses" variant="lime" size="lg">
                 Explore programmes
               </Button>
-              <Button
-                href="/contact"
-                variant="ghost"
-                size="lg"
-                className="border border-white/25 text-white hover:bg-white/10 hover:text-white"
-              >
+              <Button href="/contact" variant="secondary" size="lg">
                 Contact the institute
               </Button>
+            </div>
+          </div>
+          <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] border border-line shadow-[var(--shadow-md)] md:aspect-auto md:min-h-[26rem]">
+            <Image
+              src={IMG.architecture}
+              alt="Architecture and design technology at CAITECH"
+              fill
+              priority
+              sizes="(max-width:768px) 100vw, 50vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-petrol-deep via-petrol-deep/55 to-transparent p-5 pt-20">
+              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-lime">
+                KTDA Plaza · Nairobi
+              </p>
+              <p className="mt-1 text-sm text-white/85">
+                ICT, engineering, design technology &amp; applied practice
+              </p>
             </div>
           </div>
         </Container>

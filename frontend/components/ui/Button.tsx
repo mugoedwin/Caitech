@@ -7,12 +7,12 @@ type Size = "sm" | "md" | "lg";
 
 const variantClass: Record<Variant, string> = {
   primary:
-    "bg-petrol text-ground hover:bg-petrol-deep border border-petrol focus-visible:outline-lime",
+    "btn-primary-premium bg-lime text-lime-ink border border-lime font-semibold focus-visible:outline-cyan",
   secondary:
-    "bg-transparent text-petrol border border-petrol/30 hover:border-petrol hover:bg-surface",
+    "bg-surface text-petrol border border-line shadow-[var(--shadow-sm)] hover:border-cyan/40 hover:shadow-[var(--shadow-md)]",
   ghost:
     "bg-transparent text-petrol border border-transparent hover:bg-petrol/5",
-  lime: "bg-lime text-lime-ink border border-lime hover:bg-lime-bright font-semibold",
+  lime: "btn-primary-premium bg-lime text-lime-ink border border-lime hover:bg-lime-bright font-semibold focus-visible:outline-cyan",
 };
 
 const sizeClass: Record<Size, string> = {
@@ -49,9 +49,9 @@ export function Button(props: ButtonProps) {
   } = props;
 
   const classes = cn(
-    "inline-flex items-center justify-center font-medium tracking-wide transition-colors duration-150",
+    "inline-flex items-center justify-center font-semibold tracking-wide transition-[color,background-color,border-color,box-shadow,filter,transform] duration-160",
     "rounded-[var(--radius-md)] disabled:opacity-50 disabled:pointer-events-none",
-    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-cyan)]",
     variantClass[variant],
     sizeClass[size],
     className,
