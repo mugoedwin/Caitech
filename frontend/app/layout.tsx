@@ -4,6 +4,8 @@ import { PublicShell } from "@/components/layout/PublicShell";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { site } from "@/lib/content/stub-copy";
 import { getSiteUrl } from "@/lib/seo/site";
+import { getCategories } from "@/lib/api/courses";
+import type { NavCategory } from "@/types/nav";
 import "./globals.css";
 
 const display = Newsreader({
@@ -78,16 +80,33 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#12343B",
+  themeColor: "#15365B",
   width: "device-width",
   initialScale: 1,
 };
 
-export default function RootLayout({
+async function loadNavCategories(): Promise<NavCategory[]> {
+  try {
+    const list = await getCategories();
+    return (list ?? [])
+      .filter(
+        (c): c is { id: number; name: string; slug: string } =>
+          Boolean(c && typeof c.slug === "string" && c.slug && c.name),
+      )
+      .map((c) => ({ id: c.id, name: c.name, slug: c.slug }));
+  } catch {
+    // Mega-menu still offers View all programmes when the API is unavailable.
+    return [];
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = await loadNavCategories();
+
   return (
     <html
       lang="en-KE"
@@ -95,7 +114,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans antialiased">
         <AuthProvider>
-          <PublicShell>{children}</PublicShell>
+          <PublicShell categories={categories}>{children}</PublicShell>
         </AuthProvider>
       </body>
     </html>
